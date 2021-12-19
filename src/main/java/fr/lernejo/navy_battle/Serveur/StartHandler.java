@@ -1,7 +1,8 @@
-package fr.lernejo.navy_battle;
+package fr.lernejo.navy_battle.Serveur;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import fr.lernejo.navy_battle.Partie.Game;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
@@ -11,7 +12,12 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class PostHandler implements HttpHandler {
+public class StartHandler implements HttpHandler {
+    final public Game game;
+
+    public StartHandler(Game game) {
+        this.game = game;
+    }
 
     public int ValidationSchema(String request) {
         String schema = "{ \"$schema\": \"http://json-schema.org/schema#\", " +
@@ -44,18 +50,18 @@ public class PostHandler implements HttpHandler {
             " \"url\":\"http://localhost:8796\"," +
             " \"message\":\"Request\"} ";
 
-        String response = "";
+        String reponse = "";
 
         if (ValidationSchema(request) == 1) {
-            response = "{\"id\":\"0c575465-21f6-43c9-8a2d-bc64c3ae6241\", \"url\":\"http://localhost:8796\", " +
+            reponse = "{\"id\":\"0c575465-21f6-43c9-8a2d-bc64c3ae6241\", \"url\":\"http://localhost:8796\", " +
                 "\"message\":\"I will crush you !\"}";
-            exchange.sendResponseHeaders(202, response.length());
+            exchange.sendResponseHeaders(202, reponse.length());
         } else {
             exchange.sendResponseHeaders(400, 1);
         }
 
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
+            os.write(reponse.getBytes());
         }
     }
 }
