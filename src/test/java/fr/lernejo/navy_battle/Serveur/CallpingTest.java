@@ -2,6 +2,8 @@ package fr.lernejo.navy_battle.Serveur;
 
 import com.sun.net.httpserver.HttpServer;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -11,17 +13,24 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;;
 import java.net.http.HttpResponse;
-import java.util.concurrent.Executors;
 
 public class CallpingTest {
 
+    private final Callping callping = new Callping();
+
+    @BeforeEach
+    void setUp() {
+    }
+
+    @AfterEach
+    void tearDown() {
+    }
+
     @Test
-    public void handle() throws IOException, InterruptedException {
+    void testPing() throws IOException, InterruptedException {
 
         HttpServer server = HttpServer.create(new InetSocketAddress(9876), 0);
-        server.createContext("/ping", new Callping());
-
-        server.setExecutor(Executors.newFixedThreadPool(1));
+        server.createContext("/ping", callping);
         server.start();
 
         HttpClient client = HttpClient.newHttpClient();
@@ -29,11 +38,9 @@ public class CallpingTest {
             .uri(URI.create("http://localhost:9876/ping"))
             .build();
 
-        final HttpResponse<?> response = client.send(request,
-            HttpResponse.BodyHandlers.ofString());
+        Assertions.assertThat(client.send(request, HttpResponse.BodyHandlers.ofString()).body()).isEqualTo("OK");
+        Assertions.assertThat(client.send(request, HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
 
-        Assertions.assertThat(response.statusCode()).isEqualTo(200);
         server.stop(0);
-
     }
 }
