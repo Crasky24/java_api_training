@@ -11,12 +11,15 @@ import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 public class StartHandler implements HttpHandler {
     final public Game game;
+    private final int myPort;
 
-    public StartHandler(Game game) {
+    public StartHandler(Game game, int port) {
         this.game = game;
+        this.myPort = port;
     }
 
     public int ValidationSchema(String request) {
@@ -46,22 +49,29 @@ public class StartHandler implements HttpHandler {
     }
 
     public void handle(HttpExchange exchange) throws IOException {
-        String request = "{\"id\":\"0c575465-21f6-43c9-8a2d-bc64c3ae6248\"," +
-            " \"url\":\"http://localhost:8796\"," +
-            " \"message\":\"Request\"} ";
 
-        String reponse = "";
+        if(exchange.getRequestMethod().equals("POST")) {
+            String request = "{\"id\":\"0\"," +
+                " \"url\":\"http://localhost:" + myPort + "\", " +
+                " \"message\":\"Request\"} ";
 
-        if (ValidationSchema(request) == 1) {
-            reponse = "{\"id\":\"0c575465-21f6-43c9-8a2d-bc64c3ae6241\", \"url\":\"http://localhost:8796\", " +
-                "\"message\":\"I will crush you !\"}";
-            exchange.sendResponseHeaders(202, reponse.length());
-        } else {
-            exchange.sendResponseHeaders(400, 1);
-        }
+            String reponse = "";
 
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(reponse.getBytes());
+            if (ValidationSchema(request) == 1) {
+                reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
+                    "\"message\":\"I will crush you !\"}";
+                exchange.sendResponseHeaders(202, reponse.length());
+            } else {
+                exchange.sendResponseHeaders(400, 1);
+            }
+
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(reponse.getBytes());
+            }
+
+            System.out.println("The game starts!");
+            Scanner test = new Scanner(System.in);
+            System.out.println("Choisir une case :");
         }
     }
 }

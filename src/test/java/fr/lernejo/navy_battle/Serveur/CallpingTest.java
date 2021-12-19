@@ -33,7 +33,7 @@ public class CallpingTest {
             HttpResponse.BodyHandlers.ofString());
 
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
-        server.stop(1);
+        server.stop(0);
 
     }
 }
