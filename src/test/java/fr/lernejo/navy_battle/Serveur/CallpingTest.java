@@ -2,7 +2,7 @@ package fr.lernejo.navy_battle.Serveur;
 
 import com.sun.net.httpserver.HttpServer;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 import java.io.IOException;
