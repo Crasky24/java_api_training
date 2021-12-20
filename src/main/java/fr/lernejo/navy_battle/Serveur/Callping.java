@@ -9,7 +9,6 @@ import java.io.OutputStream;
 public class Callping implements HttpHandler {
 
     public void handle(HttpExchange exchange) throws IOException {
-
         String body = "OK";
         exchange.sendResponseHeaders(200, body.length());
         try (OutputStream os = exchange.getResponseBody()) {

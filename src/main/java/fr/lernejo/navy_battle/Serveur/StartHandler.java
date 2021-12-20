@@ -11,11 +11,17 @@ import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Scanner;
 
 public class StartHandler implements HttpHandler {
     final public Game game;
     private final int myPort;
+
+    public final String schema = "{ \"$schema\": \"http://json-schema.org/schema#\", " +
+        " \"type\":\"object\"," +
+        " \"properties\": {\"id\": {\"type\": \"string\"}, " +
+        "                  \"url\": {\"type\": \"string\"}, " +
+        "                  \"message\": {\"type\": \"string\"}}, " +
+        " \"required\": [\"id\", \"url\", \"message\"]}";
 
     public StartHandler(Game game, int port) {
         this.game = game;
@@ -23,12 +29,6 @@ public class StartHandler implements HttpHandler {
     }
 
     public int ValidationSchema(String request) {
-        String schema = "{ \"$schema\": \"http://json-schema.org/schema#\", " +
-            " \"type\":\"object\"," +
-            " \"properties\": {\"id\": {\"type\": \"string\"}, " +
-            "                  \"url\": {\"type\": \"string\"}, " +
-            "                  \"message\": {\"type\": \"string\"}}, " +
-            " \"required\": [\"id\", \"url\", \"message\"]}";
 
         JSONTokener TokenSchema = new JSONTokener(schema);
         JSONTokener TokenRequest = new JSONTokener(request);
@@ -49,29 +49,18 @@ public class StartHandler implements HttpHandler {
     }
 
     public void handle(HttpExchange exchange) throws IOException {
-
         if(exchange.getRequestMethod().equals("POST")) {
             String request = "{\"id\":\"0\"," +
                 " \"url\":\"http://localhost:" + myPort + "\", " +
                 " \"message\":\"Request\"} ";
 
-            String reponse = "";
-
             if (ValidationSchema(request) == 1) {
-                reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
+                String reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
                     "\"message\":\"I will crush you !\"}";
                 exchange.sendResponseHeaders(202, reponse.length());
             } else {
                 exchange.sendResponseHeaders(400, 1);
             }
-
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(reponse.getBytes());
-            }
-
-            System.out.println("The game starts!");
-            Scanner test = new Scanner(System.in);
-            System.out.println("Choisir une case :");
         }
     }
 }

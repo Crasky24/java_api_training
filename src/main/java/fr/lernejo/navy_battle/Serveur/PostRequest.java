@@ -21,7 +21,6 @@ public class PostRequest {
                 "\"url\":\"http://localhost:" + myPort + "\"," +
                 " \"message\":\"Hello\"}"))
             .build();
-
         HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
