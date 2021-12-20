@@ -17,7 +17,7 @@ public class PostRequest {
             .uri(URI.create(adversaryURL + "/api/game/start"))
             .setHeader("Accept", "application/json")
             .setHeader("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"1\", " +
+            .POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"0\", " +
                 "\"url\":\"http://localhost:" + myPort + "\"," +
                 " \"message\":\"Hello\"}"))
             .build();
