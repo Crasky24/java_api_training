@@ -22,7 +22,7 @@ public class Launcher {
         server.createContext("/api/game/fire", new FireHandler(game));
         server.setExecutor(Executors.newFixedThreadPool(1));
         server.start();
-        if(args.length == 2) {
+        if(args.length > 1) {
             PostRequest postRequest = new PostRequest(port);
             postRequest.sendPostRequest(args[1]);
         }

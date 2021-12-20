@@ -29,15 +29,11 @@ public class StartHandler implements HttpHandler {
     }
 
     public int ValidationSchema(String request) {
-
         JSONTokener TokenSchema = new JSONTokener(schema);
         JSONTokener TokenRequest = new JSONTokener(request);
-
         JSONObject ObjSchema = new JSONObject(TokenSchema);
         JSONObject ObjRequest = new JSONObject(TokenRequest);
-
         Schema schemaValidator = SchemaLoader.load(ObjSchema);
-
         try {
             schemaValidator.validate(ObjRequest);
             return 1;
@@ -50,17 +46,17 @@ public class StartHandler implements HttpHandler {
 
     public void handle(HttpExchange exchange) throws IOException {
         if(exchange.getRequestMethod().equals("POST")) {
-            String request = "{\"id\":\"0\"," +
-                " \"url\":\"http://localhost:" + myPort + "\", " +
-                " \"message\":\"Request\"} ";
-
-            if (ValidationSchema(request) == 1) {
-                String reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
-                    "\"message\":\"I will crush you !\"}";
+            String reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
+                "\"message\":\"I will crush you !\"}";
+            if (ValidationSchema(reponse) == 1) {
                 exchange.sendResponseHeaders(202, reponse.length());
             } else {
-                exchange.sendResponseHeaders(400, 1);
+                exchange.sendResponseHeaders(400, reponse.length());
             }
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(reponse.getBytes());
+            }
+            System.out.println("La Partie commence");
         }
     }
 }
