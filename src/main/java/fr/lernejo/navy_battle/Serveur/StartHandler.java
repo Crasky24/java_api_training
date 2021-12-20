@@ -44,10 +44,15 @@ public class StartHandler implements HttpHandler {
         }
     }
 
+    public String Reponse() {
+        String reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
+            "\"message\":\"I will crush you !\"}";
+        return reponse;
+    }
+
     public void handle(HttpExchange exchange) throws IOException {
         if(exchange.getRequestMethod().equals("POST")) {
-            String reponse = "{\"id\":\"0\", \"url\":\"http://localhost:" + myPort + "\", " +
-                "\"message\":\"I will crush you !\"}";
+            String reponse = Reponse();
             if (ValidationSchema(reponse) == 1) {
                 exchange.sendResponseHeaders(202, reponse.length());
             } else {
@@ -57,6 +62,7 @@ public class StartHandler implements HttpHandler {
                 os.write(reponse.getBytes());
             }
             System.out.println("La Partie commence");
+            FireHandler fire = new FireHandler(this.game);
         }
     }
 }

@@ -12,6 +12,7 @@ public class FireHandler implements HttpHandler {
     public FireHandler(Game game) {
         this.game = game;
     }
+
     public final String schema = "{\"$schema\":\"http://json-schema.org/schema#\"," +
         "\"type\":\"object\"," +
         "\"properties\":{\"consequence\":{\"type\":\"string\"," +
@@ -19,8 +20,8 @@ public class FireHandler implements HttpHandler {
         "\"required\":[\"consequence\",\"shipLeft\"]}";
 
     public void handle(HttpExchange exchange) throws IOException {
-        String consequence = "";
-        String shipLeft = "";
-        String reponse = "{\"consequence\":\"" + consequence + "\", \"shipLeft\":" + shipLeft + "}";
+        if(exchange.getRequestMethod().equals("GET")){
+            System.exit(0);
+        }
     }
 }

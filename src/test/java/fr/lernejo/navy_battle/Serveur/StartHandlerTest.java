@@ -16,8 +16,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.Executors;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class StartHandlerTest {
     private final Game game = new Game();
     @BeforeEach
